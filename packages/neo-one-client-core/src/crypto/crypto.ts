@@ -42,6 +42,11 @@ export class InvalidAddressError extends CustomError {
   }
 }
 
+interface WitnessOptions {
+  readonly message: Buffer;
+  readonly privateKey: PrivateKey;
+}
+
 const sha1 = (value: Buffer): Buffer =>
   cryptoLib
     .createHash('sha1')
@@ -296,6 +301,43 @@ const createWitnessForSignature = (signature: Buffer, publicKey: ECPoint): Witne
 const createWitness = (message: Buffer, privateKey: PrivateKey): Witness =>
   createWitnessForSignature(sign({ message, privateKey }), privateKeyToPublicKey(privateKey));
 
+export const newCreateWitness = (optionsIn: WitnessOptions | ReadonlyArray<WitnessOptions>) => {
+  const options = optionsIn instanceof Array ? optionsIn : [optionsIn];
+
+  const { mIn, publicKeys, publicKeysToSignature } = options.reduce(
+    (
+      acc: {
+        readonly mIn: number;
+        readonly publicKeys: ReadonlyArray<ECPoint>;
+        readonly publicKeysToSignature: { [key in string]: Buffer };
+      },
+      witnessOptions,
+    ) => ({
+      mIn: acc.mIn + 1,
+      publicKeys: acc.publicKeys.concat(privateKeyToPublicKey(witnessOptions.privateKey)),
+      publicKeysToSignature: {
+        ...acc.publicKeysToSignature,
+        [common.ecPointToString(privateKeyToPublicKey(witnessOptions.privateKey))]: sign({ ...witnessOptions }),
+      },
+    }),
+    {
+      mIn: 0,
+      publicKeys: [],
+      publicKeysToSignature: {},
+    },
+  );
+
+  if (mIn === 1) {
+    const pubKey = publicKeys[0];
+
+    return createWitnessForSignature(publicKeysToSignature[common.ecPointToString(pubKey)], pubKey);
+  }
+  if (mIn >= 2) {
+    return createMultiSignatureWitness(mIn, publicKeys, publicKeysToSignature);
+  }
+  throw new Error(`how did you even get here`);
+};
+
 const getVerificationScriptHash = (publicKey: ECPoint): UInt160 => toScriptHash(createVerificationScript(publicKey));
 
 const compareKeys = (a: KeyPair, b: KeyPair): number => {
@@ -321,6 +363,7 @@ const createMultiSignatureVerificationScript = (mIn: number, publicKeys: Readonl
     throw new InvalidNumberOfKeysError();
   }
 
+  // we can delete this? ^ is going to throw before this anytime this is true.
   if (publicKeys.length > 1024) {
     throw new TooManyPublicKeysError();
   }
