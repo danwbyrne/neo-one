@@ -1,4 +1,5 @@
 import { common, crypto, scriptHashToAddress as scriptHashToAddressBase } from '@neo-one/client-core';
+import { entropyToMnemonic, generateMnemonic, mnemonicToEntropy, validateMnemonic } from 'bip39';
 import { AddressString, PrivateKeyString, PublicKeyString } from './types';
 
 export const publicKeyToScriptHash = (publicKey: PublicKeyString): string =>
@@ -70,3 +71,8 @@ export const decryptNEP2 = async ({
 };
 
 export const createPrivateKey = (): PrivateKeyString => common.privateKeyToString(crypto.createPrivateKey());
+
+export const createMnemonic = generateMnemonic;
+export const mnemonicFromPrivateKey = entropyToMnemonic;
+export const privateKeyFromMnemonic = mnemonicToEntropy;
+export const isMnemonic = validateMnemonic;
