@@ -57,13 +57,13 @@ class One {
 
     let stdout = '';
     const stdoutListener = (res) => {
-      stdout += res;
+      process.stdout.write(res.toString());
     };
     this.server.stdout.on('data', stdoutListener);
 
     let stderr = '';
     const stderrListener = (res) => {
-      stderr += res;
+      process.stderr.write(res.toString());
     };
     this.server.stderr.on('data', stderrListener);
 
