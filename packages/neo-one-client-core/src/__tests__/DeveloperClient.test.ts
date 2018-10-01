@@ -55,4 +55,13 @@ describe('DeveloperClient', () => {
     expect(provider.reset).toHaveBeenCalledWith();
     expect(provider.reset).toHaveBeenCalledTimes(1);
   });
+
+  test('getSettings', async () => {
+    const options = { secondsPerBlock: 10 };
+    provider.updateSettings = jest.fn();
+    await developerClient.updateSettings(options);
+
+    const settings = await developerClient.getSettings();
+    expect(settings).toEqual(options);
+  });
 });

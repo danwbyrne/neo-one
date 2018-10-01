@@ -621,4 +621,54 @@ describe('arg assertions', () => {
 
     expect(() => args.assertTransactionOptions('value', value)).toThrowErrorMatchingSnapshot();
   });
+
+  test('assertMap - Throw Invalid Map', () => {
+    const badValue = 0;
+    const assertMapThrow = () => args.assertMap('value', badValue);
+
+    expect(assertMapThrow).toThrowError(`Expected Map for value, found ${badValue}`);
+  });
+
+  test('assertObject - Throw Invalid Object', () => {
+    const badValue = 0;
+    const assertObjectThrow = () => args.assertObject('value', badValue);
+
+    expect(assertObjectThrow).toThrowError(`Expected Object for value, found ${badValue}`);
+  });
+
+  test('assertNullableMap -- Returns New Map', () => {
+    const nullMap = args.assertNullableMap('value');
+    const nullerMap = args.assertNullableMap('value', nullMap);
+
+    expect(args.assertMap('value', nullMap)).toEqual(nullMap);
+    expect(nullerMap).toEqual(nullMap);
+  });
+
+  test('assertABIProperties - Throw Invalid Argument', () => {
+    const badValue = 0;
+    const assertABIPropsThrow = () => args.assertMap('value', badValue);
+
+    expect(assertABIPropsThrow).toThrowError(`Expected ABIReturn for value, found ${badValue}`);
+  });
+
+  test('assertSourceMaps - Throw Invalid Argument', () => {
+    const badValue = 0;
+    const assertSourceMapsThrow = () => args.assertSourceMaps('value', badValue);
+
+    expect(assertSourceMapsThrow).toThrowError(`Expected SourceMaps for value, found ${badValue}`);
+  });
+
+  test('assertForwardValue - Throw Invalid Argument', () => {
+    const badValue = 0;
+    const assertForwardValueThrow = () => args.assertForwardValue('value', badValue);
+
+    expect(assertForwardValueThrow).toThrowError(`Expected ForwardValue for value, found ${badValue}`);
+  });
+
+  test('assertPrivateKey - Throw Invalid Argument', () => {
+    const badValue = 0;
+    const assertPrivateKeyThrow = () => args.assertPrivateKey('value', badValue);
+
+    expect(assertPrivateKeyThrow).toThrowError(`Expected PrivateKey for value, found ${badValue}`);
+  });
 });

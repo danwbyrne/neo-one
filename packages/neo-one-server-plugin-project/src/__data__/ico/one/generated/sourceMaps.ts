@@ -1,14 +1,14 @@
-/* @hash 83d5169deb92d6a3a891b67052ca6b3f */
+/* @hash 30eb60d7691a4015d0e2b81a910a52a7 */
 // tslint:disable
 /* eslint-disable */
-/* @source-map-hash d4b6c180c4dc9bbe96a8f8eabe98a449 */
+/* @source-map-hash ee9abd7d3e443b73a0fb00f5c47a91f6 */
 import { OneClient, SourceMaps } from '@neo-one/client';
 import { projectID } from './projectID';
 
 let sourceMapsIn: Promise<SourceMaps> = Promise.resolve({});
 if (process.env.NODE_ENV !== 'production') {
   sourceMapsIn = Promise.resolve().then(async () => {
-    const client = new OneClient(16019);
+    const client = new OneClient(20914);
     const result = await client.request({
       plugin: '@neo-one/server-plugin-project',
       options: { type: 'sourceMaps', projectID },

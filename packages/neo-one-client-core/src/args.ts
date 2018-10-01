@@ -292,10 +292,9 @@ const assertABIReturn = (name: string, value?: unknown): ABIReturn => {
       return { type, decimals: assertProperty(value, 'ABIReturn', 'decimals', assertNumber), optional, forwardedValue };
     case 'ForwardValue':
       return { type, optional, forwardedValue };
+    /* istanbul ignore next */
     default:
-      /* istanbul ignore next */
       utils.assertNever(type);
-      /* istanbul ignore next */
       throw new Error('For TS');
   }
 };
@@ -305,6 +304,7 @@ const assertABIDefaultType = (name: string, valueIn?: unknown): ABIDefaultType =
   switch (value) {
     case 'sender':
       return 'sender';
+    /* istanbul ignore next */
     default:
       throw new InvalidArgumentError('ABIDefaultType', name, value);
   }
@@ -316,6 +316,7 @@ const assertNullableABIDefault = (name: string, value?: unknown): ABIDefault | u
   }
 
   if (!isObject(value)) {
+    /* istanbul ignore next */
     throw new InvalidArgumentError('ABIDefault', name, value);
   }
 
@@ -323,6 +324,7 @@ const assertNullableABIDefault = (name: string, value?: unknown): ABIDefault | u
   switch (type) {
     case 'sender':
       return { type: 'sender' };
+    /* istanbul ignore next */
     default:
       throw new InvalidArgumentError('ABIDefaultType', name, value);
   }
@@ -399,10 +401,9 @@ const assertABIParameter = (propName: string, value?: unknown): ABIParameter => 
       };
     case 'ForwardValue':
       return { type, name, optional, default: defaultValue, forwardedValue, rest };
+    /* istanbul ignore next */
     default:
-      /* istanbul ignore next */
       utils.assertNever(type);
-      /* istanbul ignore next */
       throw new Error('For TS');
   }
 };
@@ -506,6 +507,7 @@ export const assertSmartContractDefinition = (name: string, value?: unknown): Sm
 };
 
 const assertScriptBuilderParam = (name: string, value?: unknown): ScriptBuilderParam => {
+  /* istanbul ignore if */
   if (value == undefined) {
     throw new InvalidArgumentError('ScriptBuilderParam', name, value);
   }
@@ -515,6 +517,7 @@ const assertScriptBuilderParam = (name: string, value?: unknown): ScriptBuilderP
 };
 
 const assertNullableScriptBuilderParam = (name: string, value?: unknown): ScriptBuilderParam | undefined => {
+  /* istanbul ignore if */
   if (value == undefined) {
     return undefined;
   }
@@ -523,6 +526,7 @@ const assertNullableScriptBuilderParam = (name: string, value?: unknown): Script
 };
 
 const assertParam = (name: string, value?: unknown): Param => {
+  /* istanbul ignore if */
   if (value == undefined) {
     throw new InvalidArgumentError('Param', name, value);
   }
@@ -601,7 +605,9 @@ export const assertAttribute = (name: string, attribute?: unknown): Attribute =>
 
   const usage = assertProperty(attribute, 'Attribute', 'usage', assertAttributeUsage);
   switch (usage) {
+    /* istanbul ignore next */
     case 'ContractHash':
+    /* istanbul ignore next */
     case 'Vote':
     case 'Hash1':
     case 'Hash2':
@@ -633,6 +639,7 @@ export const assertAttribute = (name: string, attribute?: unknown): Attribute =>
         usage,
         data: assertProperty(attribute, 'Attribute', 'data', assertPublicKey),
       };
+    /* istanbul ignore next */
     case 'DescriptionUrl':
     case 'Description':
     case 'Remark':
@@ -655,10 +662,9 @@ export const assertAttribute = (name: string, attribute?: unknown): Attribute =>
         usage,
         data: assertProperty(attribute, 'Attribute', 'data', assertBuffer),
       };
+    /* istanbul ignore next */
     default:
-      /* istanbul ignore next */
       utils.assertNever(usage);
-      /* istanbul ignore next */
       throw new Error('For TS');
   }
 };

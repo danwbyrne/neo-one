@@ -66,6 +66,7 @@ export class AsyncBlockIterator implements AsyncIterator<Block> {
 
     const item = this.mutableItems.shift();
     if (item !== undefined) {
+      /* istanbul ignore if */
       if (item.type === 'error') {
         return Promise.reject(item.error);
       }
@@ -93,6 +94,7 @@ export class AsyncBlockIterator implements AsyncIterator<Block> {
   }
 
   private push(item: Item): void {
+    /* istanbul ignore if */
     if (this.mutableDone) {
       throw new Error('AsyncBlockIterator already ended');
     }
@@ -119,6 +121,7 @@ export class AsyncBlockIterator implements AsyncIterator<Block> {
   }
 
   private fetch(): void {
+    /* istanbul ignore if */
     if (this.mutableFetching) {
       return;
     }
@@ -142,6 +145,7 @@ export class AsyncBlockIterator implements AsyncIterator<Block> {
         startHeight = blockCount - 1;
         this.mutableStartHeight = startHeight;
       }
+      /* istanbul ignore if */
       if (indexIn === undefined) {
         indexIn = blockCount - 1;
         this.mutableCurrentIndex = indexIn;
@@ -150,6 +154,7 @@ export class AsyncBlockIterator implements AsyncIterator<Block> {
     const index = indexIn;
 
     const incIndex = (value: number) => {
+      /* istanbul ignore if */
       if (this.mutableCurrentIndex === undefined) {
         throw new Error('Something went wrong!');
       }

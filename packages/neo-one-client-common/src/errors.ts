@@ -78,3 +78,8 @@ export const InvalidTransactionTypeError = makeErrorWithCode(
   'INVALID_TRANSACTION_TYPE',
   (transactionType: number) => `Expected transaction type, found: ${transactionType.toString(16)}`,
 );
+
+export const InvalidByteCodeError = makeErrorWithCode(
+  'INVALID_BYTECODE',
+  (value: number) => `Expected VM OpCode, received: ${value}`,
+);
