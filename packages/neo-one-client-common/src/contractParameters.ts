@@ -80,6 +80,7 @@ const toBufferBuffer = (contractParameter: ContractParameter): Buffer => {
     case 'Void':
       value = Buffer.alloc(0, 0);
       break;
+    /* istanbul ignore next */
     default:
       /* istanbul ignore next */
       commonUtils.assertNever(contractParameter);
@@ -217,6 +218,7 @@ const toObject = (contractParameter: ContractParameter, parameter: ObjectABI): {
     const key = toString(keyParam);
     const value = parameter.properties[key] as ABIReturn | undefined;
     if (value === undefined) {
+      /* istanbul ignore next */
       throw new InvalidContractParameterError(contractParameter, ['Map']);
     }
     // tslint:disable-next-line no-any
@@ -254,6 +256,7 @@ function wrapNullable<Result>(
         throw error as Error;
       }
 
+      /* istanbul ignore next */
       return undefined;
     }
   };
@@ -270,10 +273,13 @@ function wrapNullableABI<Result, ABI>(
 
       return func(contractParameter, parameter);
     } catch (error) {
+      /* istanbul ignore next */
       if (error.code === 'INVALID_CONTRACT_PARAMETER' || error.code === 'INVALID_CONTRACT_PARAMETER_TYPE_JSON') {
+        /* istanbul ignore next */
         throw error as Error;
       }
 
+      /* istanbul ignore next */
       return undefined;
     }
   };

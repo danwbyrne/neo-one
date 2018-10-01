@@ -155,7 +155,7 @@ export class ScriptBuilder {
     if (typeof param === 'object') {
       return this.emitPushObject(param);
     }
-
+    /* istanbul ignore next */
     throw new InvalidParamError(typeof param);
   }
 

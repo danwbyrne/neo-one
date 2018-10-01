@@ -1,7 +1,7 @@
 import { data, keys } from '../__data__';
 import { common } from '../common';
 import { contractParameters, smartContractConverters } from '../contractParameters';
-import { BufferContractParameter } from '../types';
+import { ABIReturn, BufferContractParameter, ContractParameter, MapABI } from '../types';
 import { utils } from '../utils';
 
 describe('contractParameters', () => {
@@ -445,5 +445,20 @@ describe('contractParameters', () => {
     const result = contractParameters.Void({ type: 'Void' }, { type: 'Void' });
 
     expect(result).toEqual(undefined);
+  });
+
+  test('Errors', () => {
+    // tslint:disable-next-line:no-object-literal-type-assertion
+    const badContractParam = { type: 'Void' } as ContractParameter;
+    // tslint:disable-next-line:no-object-literal-type-assertion
+    const badParam = {
+      // tslint:disable-next-line:no-object-literal-type-assertion
+      key: { x: 'foo', type: 'ForwardValue' } as ABIReturn,
+      value: { y: 'bar', type: 'ForwardValue' },
+      type: 'Void' as 'Map',
+    } as MapABI;
+    const toMapThrowBadParam = () => smartContractConverters.toMap(badContractParam, badParam);
+
+    expect(toMapThrowBadParam).toThrowError('Expected one of ["Map"] ContractParameterTypes, found Void');
   });
 });

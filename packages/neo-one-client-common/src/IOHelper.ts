@@ -22,7 +22,7 @@ const sizeOfFixed8 = 8;
 const sizeOfVarUIntLE = (valueIn: number | BN): number => {
   const value = new BN(valueIn);
   if (value.lt(utils.ZERO)) {
-    throw new InvalidFormatError();
+    throw new InvalidFormatError('value is less than 0.');
   }
 
   if (value.lt(utils.FD)) {
@@ -63,6 +63,7 @@ export const IOHelper = {
   sizeOfUInt16LE,
   sizeOfUInt32LE,
   sizeOfUInt64LE,
+  sizeOfVarUIntLE, // was this supposed to not be exported?
   sizeOfVarBytesLE,
   sizeOfVarString,
   sizeOfFixedString,
