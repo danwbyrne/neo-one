@@ -39,9 +39,8 @@ export class IssueTransactionModel<
       scripts,
       hash,
     });
-
     if (this.version !== 0) {
-      throw new InvalidFormatError();
+      throw new InvalidFormatError('expected version to equal 0.');
     }
   }
 

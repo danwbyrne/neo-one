@@ -82,9 +82,7 @@ const toBufferBuffer = (contractParameter: ContractParameter): Buffer => {
       break;
     /* istanbul ignore next */
     default:
-      /* istanbul ignore next */
       commonUtils.assertNever(contractParameter);
-      /* istanbul ignore next */
       throw new Error('For TS');
   }
 
