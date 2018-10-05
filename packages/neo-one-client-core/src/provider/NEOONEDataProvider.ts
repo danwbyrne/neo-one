@@ -56,7 +56,7 @@ import { flatMap } from '@reactivex/ix-es2015-cjs/asynciterable/pipe/flatmap';
 import BigNumber from 'bignumber.js';
 import _ from 'lodash';
 import { AsyncBlockIterator } from '../AsyncBlockIterator';
-import { clientUtils } from '../clientUtils';
+import * as clientUtils from '../clientUtils';
 import { MissingTransactionDataError } from '../errors';
 import { convertAction, convertCallReceipt, convertInvocationResult } from './convert';
 import { JSONRPCClient } from './JSONRPCClient';

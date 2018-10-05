@@ -1,6 +1,9 @@
 import { AddressString, addressToScriptHash, common, ScriptBuilder, ScriptBuilderParam } from '@neo-one/client-common';
-
-const getInvokeMethodInvocationScript = ({
+// tslint:disable
+// @ts-ignore
+import BN from 'bn.js';
+// tslint:enable
+export const getInvokeMethodInvocationScript = ({
   method,
   params,
 }: {
@@ -13,7 +16,7 @@ const getInvokeMethodInvocationScript = ({
   return sb.build();
 };
 
-const getInvokeMethodScript = ({
+export const getInvokeMethodScript = ({
   address,
   method,
   params,
@@ -26,9 +29,4 @@ const getInvokeMethodScript = ({
   sb.emitAppCall(common.stringToUInt160(addressToScriptHash(address)), method, ...params);
 
   return sb.build();
-};
-
-export const clientUtils = {
-  getInvokeMethodInvocationScript,
-  getInvokeMethodScript,
 };

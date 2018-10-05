@@ -53,7 +53,7 @@ import { labels as labelNames, utils as commonUtils } from '@neo-one/utils';
 import BigNumber from 'bignumber.js';
 import _ from 'lodash';
 import { Observable } from 'rxjs';
-import { clientUtils } from '../clientUtils';
+import * as clientUtils from '../clientUtils';
 import {
   FundsInUseError,
   InsufficientFundsError,

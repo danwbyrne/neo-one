@@ -1,5 +1,5 @@
 import { ScriptBuilderParam } from '@neo-one/client-common';
-import { clientUtils } from '../clientUtils';
+import * as clientUtils from '../clientUtils';
 
 describe('clientUtils', () => {
   const address = 'Aae5FtScNeBqahNBzrFXr9TcyxNFTQqqMM';

@@ -284,6 +284,13 @@ const copyTypescript = ((cache) =>
       gulp.dest(getDest(format)),
     );
   }))({});
+const buildTypes = ((cache) =>
+  memoizeTask(cache, function buildTypes(format, _done) {
+    return gulp
+      .src('packages/neo-one-client/src/**/*.{ts,tsx,js}')
+      .pipe(format.project())
+      .dts.pipe(gulp.dest(getDest(format)));
+  }))({});
 const mapSources = (sourcePath) => path.basename(sourcePath);
 const rxjsTypes = new Set(['Observer']);
 const compileTypescript = ((cache) =>
@@ -343,7 +350,7 @@ const compileTypescript = ((cache) =>
   }))({});
 const buildTypescript = ((cache) =>
   memoizeTask(cache, function buildTypescript(format, done, type) {
-    return gulp.series(copyTypescript(format, type), compileTypescript(format, type))(done);
+    return gulp.series(copyTypescript(format, type), compileTypescript(format, type), buildTypes(format))(done);
   }))({});
 
 const buildAll = ((cache) =>
@@ -491,6 +498,8 @@ gulp.task('buildTypescript', gulp.parallel(FORMATS.map((format) => buildTypescri
 gulp.task('buildAll', gulp.series(FORMATS.map((format) => buildAll(format))));
 gulp.task('install', gulp.parallel(FORMATS.map((format) => install(format))));
 gulp.task('publish', gulp.parallel(FORMATS.map((format) => publish(format))));
+
+gulp.task('buildTypes', gulp.parallel(FORMATS.map((format) => buildTypes(format))));
 
 gulp.task('build', gulp.series('clean', 'buildAll', 'install'));
 

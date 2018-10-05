@@ -1512,3 +1512,6 @@ export interface Peer {
 }
 
 /* END LOW-LEVEL API */
+
+// tslint:disable-next-line:export-name
+export { BN };
