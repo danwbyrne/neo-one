@@ -7,6 +7,10 @@ import { Input } from './Input';
 import { Output } from './Output';
 import { TransactionBase, TransactionBaseAdd } from './TransactionBase';
 import { TransactionType } from './TransactionType';
+// tslint:disable
+// @ts-ignore
+import BN from 'bn.js';
+// tslint:enable
 
 export type ContractTransactionAdd = TransactionBaseAdd;
 

@@ -25,6 +25,10 @@ import {
   TransactionVerifyOptions,
 } from './TransactionBase';
 import { TransactionType } from './TransactionType';
+// tslint:disable
+// @ts-ignore
+import BN from 'bn.js';
+// tslint:enable
 
 export interface EnrollmentTransactionAdd extends TransactionBaseAdd {
   readonly publicKey: ECPoint;

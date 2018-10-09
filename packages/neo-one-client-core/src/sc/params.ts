@@ -21,6 +21,10 @@ import {
 } from '@neo-one/client-common';
 import * as args from '../args';
 import { InvalidArgumentError } from '../errors';
+// tslint:disable
+// @ts-ignore
+import BN from 'bn.js';
+// tslint:enable
 
 export const params = {
   String: (name: string, param: Param, parameter: StringABI): ScriptBuilderParam | undefined =>

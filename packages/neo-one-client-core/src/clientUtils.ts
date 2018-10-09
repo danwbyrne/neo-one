@@ -1,4 +1,8 @@
 import { AddressString, addressToScriptHash, common, ScriptBuilder, ScriptBuilderParam } from '@neo-one/client-common';
+// tslint:disable
+// @ts-ignore
+import BN from 'bn.js';
+// tslint:enable
 
 const getInvokeMethodInvocationScript = ({
   method,

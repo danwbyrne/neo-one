@@ -30,6 +30,10 @@ import { InvalidContractArgumentCountError, InvalidEventError, InvocationCallErr
 import { events as traceEvents } from '../trace';
 import { params as paramCheckers } from './params';
 import { createForwardedValueFuncArgsName, createForwardedValueFuncReturnName } from './utils';
+// tslint:disable
+// @ts-ignore
+import BN from 'bn.js';
+// tslint:enable
 
 export const convertContractParameter = ({
   type,

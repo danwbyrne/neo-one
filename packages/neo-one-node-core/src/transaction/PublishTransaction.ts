@@ -17,6 +17,10 @@ import { Input } from './Input';
 import { Output } from './Output';
 import { TransactionBase, TransactionBaseAdd, TransactionVerifyOptions } from './TransactionBase';
 import { TransactionType } from './TransactionType';
+// tslint:disable
+// @ts-ignore
+import BN from 'bn.js';
+// tslint:enable
 
 export interface PublishTransactionAdd extends TransactionBaseAdd {
   readonly contract: Contract;

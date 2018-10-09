@@ -496,6 +496,15 @@ gulp.task('publish', gulp.parallel(FORMATS.map((format) => publish(format))));
 
 gulp.task('build', gulp.series('clean', 'buildAll', 'install'));
 
+const declarationProject = ts.createProject(`tsconfig/tsconfig.decl.json`, { typescript });
+
+gulp.task('gen-dts', () =>
+  gulp
+    .src(globs.src({ dist: '/' }))
+    .pipe(declarationProject())
+    .dts.pipe(gulp.dest(path.join(DIST, 'decls'))),
+);
+
 const buildE2ESeries = (type) => gulp.series(buildAll(MAIN_FORMAT, type), install(MAIN_FORMAT));
 gulp.task('buildE2E', gulp.series('clean', buildE2ESeries()));
 

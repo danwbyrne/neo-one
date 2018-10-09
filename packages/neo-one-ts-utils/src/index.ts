@@ -24,6 +24,10 @@ import * as template from './template';
 import * as type_ from './type_';
 import * as types from './types';
 import * as variable from './variable';
+// tslint:disable
+// @ts-ignore
+import { Result } from './print';
+// tslint:enable
 
 export { ArgumentedNode, BodiedNode, BodyableNode, ParameteredNode } from './base';
 export { AnyNameableNode, PropertyNamedNode } from './node';
