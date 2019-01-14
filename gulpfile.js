@@ -124,22 +124,28 @@ const globs = {
     '!packages/*/src/__e2e__/**/*',
     '!packages/*/src/bin/**/*',
   ].concat(skipGlobs),
-  src: (format) => [
-    `${getDistBase(format)}/packages/*/src/**/*.{ts,tsx}`,
-    `!${getDistBase(format)}/packages/*/src/**/*.test.{ts,tsx}`,
-    `!${getDistBase(format)}/packages/*/src/__data__/**/*`,
-    `!${getDistBase(format)}/packages/*/src/__tests__/**/*`,
-    `!${getDistBase(format)}/packages/*/src/__e2e__/**/*`,
-    `!${getDistBase(format)}/packages/*/src/bin/**/*`,
-    `!${getDistBase(format)}/packages/neo-one-developer-tools/src/*.ts`,
-    `!${getDistBase(format)}/packages/neo-one-developer-tools-frame/src/*.ts`,
-    `!${getDistBase(format)}/packages/neo-one-smart-contract-lib/src/*.ts`,
-    `!${getDistBase(format)}/packages/neo-one-server-plugin-wallet/src/contracts/*.ts`,
+  src: [
+    `packages/*/src/**/*.{ts,tsx}`,
+    `!packages/*/src/**/*.test.{ts,tsx}`,
+    `!packages/*/src/__data__/**/*`,
+    `!packages/*/src/__tests__/**/*`,
+    `!packages/*/src/__e2e__/**/*`,
+    `!packages/*/src/bin/**/*`,
+    `!packages/neo-one-developer-tools/src/*.ts`,
+    `!packages/neo-one-developer-tools-frame/src/*.ts`,
+    `!packages/neo-one-smart-contract-lib/src/*.ts`,
+    `!packages/neo-one-server-plugin-wallet/src/contracts/*.ts`,
   ],
   types: ['packages/neo-one-types/**/*', '!packages/neo-one-types/package.json'],
   bin: ['packages/*/src/bin/*.ts'].concat(skipGlobs),
   pkg: ['packages/*/package.json'].concat(skipGlobs),
-  pkgFiles: ['packages/*/CHANGELOG.md', 'packages/*/tsconfig.json', 'packages/*/static/**/*'].concat(skipGlobs),
+  pkgFiles: [
+    'packages/*/CHANGELOG.md',
+    'packages/*/tsconfig.json',
+    'packages/*/static/**/*',
+    'packages/*/template/**/*',
+    'packages/*/proto/**/*.proto',
+  ].concat(skipGlobs),
   files: ['lerna.json', 'yarn.lock', 'tsconfig.json'],
   metadata: ['LICENSE', 'README.md'],
 };
@@ -228,7 +234,7 @@ const transformSrcPackageJSON = (format, orig, file) => ({
   ...transformBasePackageJSON(format, orig, file),
   main: 'src/index.js',
   module: format.module === 'esm' ? 'src/index.js' : undefined,
-  types: 'src/index.ts',
+  types: 'src/index.d.ts',
   sideEffects: false,
 });
 
@@ -292,24 +298,14 @@ const gulpReplaceModule = (format, stream, quote = "'") =>
   Object.entries(DEP_MAPPING[format.target][format.module])
     .concat(format === MAIN_FORMAT ? [] : pkgNames.map((p) => [quoted(p, quote), quoted(mapDep(format, p), quote)]))
     .reduce((streamIn, [moduleName, replaceName]) => streamIn.pipe(gulpReplace(moduleName, replaceName)), stream);
-const copyTypescript = ((cache) =>
-  memoizeTask(cache, function copyTypescript(format, _done, type) {
-    return gulpReplaceModule(format, addFast(format, gulp.src(globs.originalSrc), type === 'fast')).pipe(
-      gulp.dest(getDest(format)),
-    );
-  }))({});
 const mapSources = (sourcePath) => path.basename(sourcePath);
 const rxjsTypes = new Set(['Observer']);
 const compileTypescript = ((cache) =>
   memoizeTask(cache, function compileTypescript(format, _done, type) {
     return gulpReplaceModule(
       format,
-      addFast(format, gulp.src(globs.src(format)), type === 'fast')
-        .pipe(
-          gulpFilter(
-            ['**', '!**/*.proto'].concat(smartContractPkgs.map((p) => `!${getDistBase(format)}/packages/${p}/**/*`)),
-          ),
-        )
+      addFast(format, gulp.src(globs.src), type === 'fast')
+        .pipe(gulpFilter(['**', '!**/*.proto'].concat(smartContractPkgs.map((p) => `!packages/${p}/**/*`))))
         .pipe(gulpSourcemaps.init())
         // .pipe(
         //   gulpBabel({
@@ -379,6 +375,7 @@ const compileDeveloperTools = ((cache) =>
           tsconfigOverride: {
             compilerOptions: {
               inlineSources: false,
+              declaration: false,
             },
           },
           check: false,
@@ -392,11 +389,6 @@ const compileDeveloperTools = ((cache) =>
     });
   }))({});
 
-const buildTypescript = ((cache) =>
-  memoizeTask(cache, function buildTypescript(format, done, type) {
-    return gulp.series(copyTypescript(format, type), compileTypescript(format, type))(done);
-  }))({});
-
 const buildAllNoDeveloperTools = ((cache) =>
   memoizeTask(cache, function buildAllNoDeveloperTools(format, done, type) {
     return gulp.parallel(
@@ -407,7 +399,7 @@ const buildAllNoDeveloperTools = ((cache) =>
         copyFiles(format),
         copyRootPkg(format),
         copyRootTSConfig(format),
-        buildTypescript(format, type),
+        compileTypescript(format, type),
         format === MAIN_FORMAT ? 'buildBin' : undefined,
         format === MAIN_FORMAT ? 'createBin' : undefined,
         format === MAIN_FORMAT ? 'copyBin' : undefined,
@@ -417,7 +409,7 @@ const buildAllNoDeveloperTools = ((cache) =>
 
 const buildAll = ((cache) =>
   memoizeTask(cache, function buildAll(format, done, type) {
-    return gulp.parallel(...[buildAllNoDeveloperTools(format, type), compileDeveloperTools(format)])(done);
+    return gulp.parallel(buildAllNoDeveloperTools(format, type), compileDeveloperTools(format))(done);
   }))({});
 
 const install = ((cache) =>
@@ -547,7 +539,7 @@ gulp.task('copyFiles', gulp.parallel(FORMATS.map((format) => copyFiles(format)))
 gulp.task('copyRootPkg', gulp.parallel(FORMATS.map((format) => copyRootPkg(format))));
 gulp.task('copyRootTSConfig', gulp.parallel(FORMATS.map((format) => copyRootTSConfig(format))));
 gulp.task('compileDeveloperTools', gulp.parallel(FORMATS.map((format) => compileDeveloperTools(format))));
-gulp.task('buildTypescript', gulp.parallel(FORMATS.map((format) => buildTypescript(format))));
+gulp.task('buildTypescript', gulp.parallel(FORMATS.map((format) => compileTypescript(format))));
 gulp.task(
   'buildAll',
   gulp.series('compileDeveloperToolsFrame', gulp.parallel(FORMATS.map((format) => buildAll(format)))),
@@ -568,7 +560,7 @@ gulp.task(
   'watch',
   gulp.series(buildE2ESeries('fast'), function startWatch() {
     noCache = true;
-    gulp.watch(globs.originalSrc, buildTypescript(MAIN_FORMAT, 'fast'));
+    gulp.watch(globs.originalSrc, compileTypescript(MAIN_FORMAT, 'fast'));
     gulp.watch(globs.bin, gulp.series('buildBin'));
   }),
 );
