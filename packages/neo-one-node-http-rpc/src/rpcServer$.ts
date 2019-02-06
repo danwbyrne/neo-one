@@ -6,6 +6,7 @@ import * as https from 'https';
 import Application from 'koa';
 import rateLimit from 'koa-ratelimit-lru';
 import Router from 'koa-router';
+import serve from 'koa-static';
 import { combineLatest, Observable, of as _of } from 'rxjs';
 import { distinctUntilChanged, map, publishReplay, refCount } from 'rxjs/operators';
 import {
@@ -32,6 +33,10 @@ export interface Environment {
     readonly cert: string;
     readonly port: number;
     readonly host: string;
+  };
+
+  readonly splashScreen?: {
+    readonly path: string;
   };
 }
 export interface Options {
@@ -120,6 +125,10 @@ export const rpcServer$ = ({
       app.use(router.routes());
       app.use(cors);
       app.use(router.allowedMethods());
+
+      if (environment.splashScreen !== undefined) {
+        app.use(serve(environment.splashScreen.path));
+      }
 
       return app;
     }),
