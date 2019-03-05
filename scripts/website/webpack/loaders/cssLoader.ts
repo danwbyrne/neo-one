@@ -1,6 +1,7 @@
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
-import ExtractCssChunksPlugin from 'extract-css-chunks-webpack-plugin';
+// @ts-ignore
+import ExtractCssChunks from 'extract-css-chunks-webpack-plugin';
 // @ts-ignore
 import postcssFlexbugsFixes from 'postcss-flexbugs-fixes';
 import { Bundle, Stage } from '../../types';
@@ -54,6 +55,6 @@ export const cssLoader = ({ stage, bundle }: { readonly stage: Stage; readonly b
 
   return {
     test: /\.css$/,
-    loader: [ExtractCssChunksPlugin.loader, ...loaders],
+    loader: [ExtractCssChunks.loader, ...loaders],
   };
 };
