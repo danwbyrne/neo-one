@@ -27,7 +27,7 @@ const createFileSystem = (): [FileSystem, JestMocked<FileSystem>] => {
   return [fileSystem, fileSystem];
 };
 
-describe('resolve', () => {
+describe.only('resolve', () => {
   let fs: FileSystem;
   let fsMock: JestMocked<FileSystem>;
   beforeEach(() => {
@@ -36,6 +36,8 @@ describe('resolve', () => {
 
   const mockFiles = (files: { [path: string]: string }) => {
     fsMock.readFileSync.mockImplementation(((filePath: string) => {
+      console.log(filePath);
+      console.log(files);
       const file = files[filePath] as string | undefined;
       if (file !== undefined) {
         return file;
@@ -46,6 +48,7 @@ describe('resolve', () => {
     }) as any);
 
     fsMock.statSync.mockImplementation(((filePath: string) => {
+      console.log(filePath);
       const file = files[filePath] as string | undefined;
       if (file !== undefined) {
         return { isFile: () => true, isDirectory: () => false };
@@ -65,7 +68,7 @@ describe('resolve', () => {
     expect(result).toEqual('/bar/foo');
   });
 
-  test('simple absolute', () => {
+  test.only('simple absolute', () => {
     mockFiles({
       '/node_modules/foo/index.js': 'contents',
     });

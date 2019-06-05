@@ -21,12 +21,14 @@ export const resolve = ({ module: mod, from, emptyModulePath, fs, files = new Se
   const paths = getNodeModulesPaths(base).map((nodeModulePath) => path.dirname(nodeModulePath));
   const shims = loadShims(paths, emptyModulePath, fs);
   const absoluteModule = path.join(base, mod);
+  console.log(absoluteModule);
   const transformedID =
     (shims[mod] as string | undefined) !== undefined
       ? shims[mod]
       : (shims[absoluteModule] as string | undefined) !== undefined
       ? shims[absoluteModule]
       : mod;
+  console.log(transformedID);
   const resolved = resv.sync(transformedID, buildResolveOptions(base, fs, files));
 
   return (shims[resolved] as string | undefined) === undefined ? resolved : shims[resolved];
@@ -162,6 +164,7 @@ const buildResolveOptions = (basedir: string, fs: FileSystem, files: Set<string>
     }
   },
   isDirectory: (dir: string) => {
+    console.log(dir);
     try {
       const stat = fs.statSync(dir);
 
@@ -175,6 +178,7 @@ const buildResolveOptions = (basedir: string, fs: FileSystem, files: Set<string>
     }
   },
   extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  package: {},
 });
 
 export const getNodeModulesPaths = (start: string) => {
