@@ -40,13 +40,21 @@ Voila! You should now be running the most recent NEO•ONE Node in a local docke
 There are **several** ways to configure the node; any [rc](https://github.com/dominictarr/rc#rc) type configuration is accepted. as an example we can set the `logger` level of the node to _trace_ using either:
 
 ```bash
+<<<<<<< HEAD
 docker run neoonesuite/node --telemetry.logging.level=trace
+=======
+docker run quay.io/neoone/node --environment.logger.level=trace
+>>>>>>> chore(docs): update node documentation
 ```
 
 or through environment variables
 
 ```bash
+<<<<<<< HEAD
 docker run -e neo_one_node_telemetry__logging__level=trace neoonesuite/node
+=======
+docker run -e neo_one_node_environment__logger__level=trace quay.io/neoone/node
+>>>>>>> chore(docs): update node documentation
 ```
 
 Additionally you have the option of creating a `config` (no extension) file and mounting it directly to the container. By default the node will look for a config at `/etc/neo_one_node`.
@@ -56,8 +64,13 @@ So if we have a config
 ```bash
 ## /path/to/config
 {
+<<<<<<< HEAD
   "telemetry": {
     "logging": {
+=======
+  "environment": {
+    "logger": {
+>>>>>>> chore(docs): update node documentation
       "level": "trace"
     }
   }
