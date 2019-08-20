@@ -13,7 +13,7 @@ export const server = ({ stage }: { readonly stage: Stage }): webpack.Configurat
   addDefaultRules({
     ...common({ stage, bundle: 'server' }),
     resolve: {
-      mainFields: ['main'],
+      mainFields: stage === 'prod' ? ['browser', 'main'] : ['main'],
       aliasFields: [],
       extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
     },
