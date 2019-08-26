@@ -41,20 +41,28 @@ There are **several** ways to configure the node; any [rc](https://github.com/do
 
 ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 docker run neoonesuite/node --telemetry.logging.level=trace
 =======
 docker run quay.io/neoone/node --environment.logger.level=trace
 >>>>>>> chore(docs): update node documentation
+=======
+docker run neoonesuite/node --telemetry.logging.level=trace
+>>>>>>> fix(docs): fixup node docs after refactor
 ```
 
 or through environment variables
 
 ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 docker run -e neo_one_node_telemetry__logging__level=trace neoonesuite/node
 =======
 docker run -e neo_one_node_environment__logger__level=trace quay.io/neoone/node
 >>>>>>> chore(docs): update node documentation
+=======
+docker run -e neo_one_node_telemetry__logging__level=trace neoonesuite/node
+>>>>>>> fix(docs): fixup node docs after refactor
 ```
 
 Additionally you have the option of creating a `config` (no extension) file and mounting it directly to the container. By default the node will look for a config at `/etc/neo_one_node`.
@@ -65,12 +73,17 @@ So if we have a config
 ## /path/to/config
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "telemetry": {
     "logging": {
 =======
   "environment": {
     "logger": {
 >>>>>>> chore(docs): update node documentation
+=======
+  "telemetry": {
+    "logging": {
+>>>>>>> fix(docs): fixup node docs after refactor
       "level": "trace"
     }
   }

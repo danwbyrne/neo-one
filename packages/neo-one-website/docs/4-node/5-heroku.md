@@ -25,10 +25,14 @@ You can quickly apply environment variable configuration options to the node usi
 
 ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 neo_one_node_telemetry__logging__level verbose
 =======
 neo_one_node_environment__logger__level verbose
 >>>>>>> chore(docs): update node documentation
+=======
+neo_one_node_telemetry__logging__level verbose
+>>>>>>> fix(docs): fixup node docs after refactor
 ```
 
 After applying the node will restart and update its configuration.

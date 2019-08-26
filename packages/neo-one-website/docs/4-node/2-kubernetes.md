@@ -69,10 +69,14 @@ spec:
       containers:
       - name: neo-one-node
 <<<<<<< HEAD
+<<<<<<< HEAD
         image: neoonesuite/node
 =======
         image: quay.io/neoone/node:1.5
 >>>>>>> chore(docs): update node documentation
+=======
+        image: neoonesuite/node
+>>>>>>> fix(docs): fixup node docs after refactor
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -139,12 +143,17 @@ While the above examples shows how to configure our pods with environment variab
 #/path/to/config.json
 {
 <<<<<<< HEAD
+<<<<<<< HEAD
   "telemetry": {
     "logging": {
 =======
   "environment": {
     "logger": {
 >>>>>>> chore(docs): update node documentation
+=======
+  "telemetry": {
+    "logging": {
+>>>>>>> fix(docs): fixup node docs after refactor
       "level": "debug"
     }
   }
@@ -183,10 +192,14 @@ spec:
       containers:
         - name: neo-one-node
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: neoonesuite/node
 =======
           image: quay.io/neoone/node:latest
 >>>>>>> chore(docs): update node documentation
+=======
+          image: neoonesuite/node
+>>>>>>> fix(docs): fixup node docs after refactor
           ports:
             - containerPort: 8080
               name: node
@@ -331,10 +344,14 @@ spec:
       containers:
         - name: neo-one-node
 <<<<<<< HEAD
+<<<<<<< HEAD
           image: neoonesuite/node
 =======
           image: quay.io/neoone/node:1.5
 >>>>>>> chore(docs): update node documentation
+=======
+          image: neoonesuite/node
+>>>>>>> fix(docs): fixup node docs after refactor
           ports:
             - containerPort: 8080
               name: node
