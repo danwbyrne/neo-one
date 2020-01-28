@@ -30,7 +30,7 @@ aliases:
         - trying.tmp
 
   - &install |
-    node common/scripts/install-run-rush.js install
+    node common/scripts/rush-install-ci.js
 
   - &nit
     working_directory: ~/neo-one
