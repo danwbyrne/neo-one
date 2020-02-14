@@ -1,0 +1,24 @@
+{
+  "name": "@neo-one/node-tools",
+  "version": "1.0.0",
+  "description": "Tools for auditing the neo-one node storage",
+  "scripts": {
+    "build": "",
+    "tsc": "node ./node_modules/@neo-one/build-tools/bin/neo-one-tsc.js",
+    "storage": "ts-node ./src/storage.ts"
+  },
+  "dependencies": {
+    "@neo-one/client-common":"^2.3.0",
+    "@neo-one/client-core": "^2.3.0",
+    "@reactivex/ix-es2015-cjs":"^2.5.3",
+    "cross-fetch": "^3.0.4",
+    "fs-extra": "^8.1.0",
+    "lodash":"^4.17.15"
+  },
+  "devDependencies": {
+    "@neo-one/build-tools": "^1.0.0",
+    "@types/fs-extra": "^8.0.0",
+    "@types/lodash":"^4.14.138",
+    "@types/node":"^12.7.7"
+  }
+}

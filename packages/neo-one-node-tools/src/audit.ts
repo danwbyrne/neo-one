@@ -1,4 +1,4 @@
-// tslint:disable no-implicit-dependencies no-object-mutation no-array-mutation no-console
+// tslint:disable no-object-mutation no-array-mutation no-console
 import { Block, ConfirmedInvocationTransaction, RawStorageChange } from '@neo-one/client-common';
 import { NEOONEDataProvider } from '@neo-one/client-core';
 import fs from 'fs-extra';
@@ -191,8 +191,9 @@ const iterFilesInDir = async (dirPath: string): Promise<StorageMismatch | undefi
 
 const iterDirs = async () => {
   const allDirs = await fs.readdir(NEO_STORAGE_AUDIT_PATH);
-  const dirs = _.sortBy(allDirs.filter((dirName) => dirName.includes('BlockStorage')), (name) =>
-    parseInt(name.slice('BlockStorage_'.length), 10),
+  const dirs = _.sortBy(
+    allDirs.filter((dirName) => dirName.includes('BlockStorage')),
+    (name) => parseInt(name.slice('BlockStorage_'.length), 10),
   );
   const firstIndex = dirs.findIndex((dirName) => dirName === FIRST_STORAGE.folder);
 
