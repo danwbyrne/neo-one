@@ -43,15 +43,8 @@ import {
   Witness,
   WitnessModel,
 } from '@neo-one/client-common';
-import {
-  AggregationType,
-  globalStats,
-  Measure,
-  MeasureUnit,
-  processActionsAndMessage,
-  TagMap,
-} from '@neo-one/client-switch';
-import { Labels, labelToTag, utils as commonUtils } from '@neo-one/utils';
+import { processActionsAndMessage } from '@neo-one/client-switch';
+import { Labels, utils as commonUtils } from '@neo-one/utils';
 import BigNumber from 'bignumber.js';
 import debug from 'debug';
 import _ from 'lodash';
@@ -72,7 +65,6 @@ import {
 import { converters } from './converters';
 
 const logger = debug('NEOONE:LocalUserAccountProvider');
-const invokeTag = labelToTag(Labels.INVOKE_RAW_METHOD);
 
 export interface InvokeMethodOptions {
   readonly contract: AddressString;
@@ -178,70 +170,6 @@ const NEO_ONE_ATTRIBUTE: Attribute = {
   data: Buffer.from('neo-one', 'utf8').toString('hex'),
 };
 
-const transferDurationSec = globalStats.createMeasureDouble('transfer/duration', MeasureUnit.SEC);
-const transferFailures = globalStats.createMeasureInt64('transfer/failures', MeasureUnit.UNIT);
-const claimDurationSec = globalStats.createMeasureDouble('claim/duration', MeasureUnit.SEC);
-const claimFailures = globalStats.createMeasureInt64('claim/failures', MeasureUnit.UNIT);
-const invokeDurationSec = globalStats.createMeasureDouble('invoke/duration', MeasureUnit.SEC);
-const invokeFailures = globalStats.createMeasureInt64('invoke/failures', MeasureUnit.UNIT);
-
-const NEO_TRANSFER_DURATION_SECONDS = globalStats.createView(
-  'neo_transfer_duration_seconds',
-  transferDurationSec,
-  AggregationType.DISTRIBUTION,
-  [],
-  'transfer durations in seconds',
-  [1, 2, 5, 7.5, 10, 12.5, 15, 17.5, 20],
-);
-globalStats.registerView(NEO_TRANSFER_DURATION_SECONDS);
-
-const NEO_TRANSFER_FAILURES_TOTAL = globalStats.createView(
-  'neo_transfer_failures_total',
-  transferFailures,
-  AggregationType.COUNT,
-  [],
-  'total transfer failures',
-);
-globalStats.registerView(NEO_TRANSFER_FAILURES_TOTAL);
-
-const NEO_CLAIM_DURATION_SECONDS = globalStats.createView(
-  'neo_claim_duration_seconds',
-  claimDurationSec,
-  AggregationType.DISTRIBUTION,
-  [],
-  'claim durations in seconds',
-  [1, 2, 5, 7.5, 10, 12.5, 15, 17.5, 20],
-);
-globalStats.registerView(NEO_CLAIM_DURATION_SECONDS);
-
-const NEO_CLAIM_FAILURES_TOTAL = globalStats.createView(
-  'neo_claims_failures_total',
-  claimFailures,
-  AggregationType.COUNT,
-  [],
-  'total claims failures',
-);
-globalStats.registerView(NEO_CLAIM_FAILURES_TOTAL);
-
-const NEO_INVOKE_RAW_DURATION_SECONDS = globalStats.createView(
-  'neo_invoke_raw_duration_seconds',
-  invokeDurationSec,
-  AggregationType.DISTRIBUTION,
-  [invokeTag],
-  'invoke durations in seconds',
-  [1, 2, 5, 7.5, 10, 12.5, 15, 17.5, 20],
-);
-globalStats.registerView(NEO_INVOKE_RAW_DURATION_SECONDS);
-
-const NEO_INVOKE_RAW_FAILURES_TOTAL = globalStats.createView(
-  'neo_invoke_raw_failures_total',
-  invokeFailures,
-  AggregationType.COUNT,
-  [invokeTag],
-  'total invocation failures',
-);
-globalStats.registerView(NEO_INVOKE_RAW_FAILURES_TOTAL);
-
 interface FullTransfer extends Transfer {
   readonly from: UserAccountID;
 }
@@ -300,10 +228,6 @@ export abstract class UserAccountProviderBase<TProvider extends Provider> {
 
     return this.capture(async () => this.executeTransfer(transfers, from, attributes, networkFee), {
       name: 'neo_transfer',
-      measures: {
-        total: transferDurationSec,
-        error: transferFailures,
-      },
     });
   }
 
@@ -312,10 +236,6 @@ export abstract class UserAccountProviderBase<TProvider extends Provider> {
 
     return this.capture(async () => this.executeClaim(from, attributes, networkFee), {
       name: 'neo_claim',
-      measures: {
-        total: claimDurationSec,
-        error: claimFailures,
-      },
     });
   }
 
@@ -602,10 +522,6 @@ export abstract class UserAccountProviderBase<TProvider extends Provider> {
       },
       {
         name: 'neo_invoke_claim',
-        measures: {
-          total: claimDurationSec,
-          error: claimFailures,
-        },
       },
     );
   }
@@ -1182,59 +1098,29 @@ export abstract class UserAccountProviderBase<TProvider extends Provider> {
     {
       name,
       labels = {},
-      measures,
+
       invoke = false,
     }: {
       readonly name: string;
       readonly labels?: Record<string, string>;
-      readonly measures?: {
-        readonly total?: Measure;
-        readonly error?: Measure;
-      };
       readonly invoke?: boolean;
     },
   ): Promise<T> {
-    const tags = new TagMap();
     if (invoke) {
       const value = labels[Labels.INVOKE_RAW_METHOD];
       // tslint:disable-next-line: strict-type-predicates
       if (value === undefined) {
         throw new Error('invocation should have a invoke method');
       }
-      tags.set(invokeTag, { value });
     }
 
-    const startTime = commonUtils.nowSeconds();
     try {
       const result = await func();
       logger('%o', { name, level: 'verbose', ...labels });
-      if (measures !== undefined && measures.total !== undefined) {
-        globalStats.record(
-          [
-            {
-              measure: measures.total,
-              value: commonUtils.nowSeconds() - startTime,
-            },
-          ],
-          tags,
-        );
-      }
 
       return result;
     } catch (error) {
       logger('%o', { name, level: 'error', error: error.message, ...labels });
-      if (measures !== undefined && measures.error !== undefined) {
-        globalStats.record(
-          [
-            {
-              measure: measures.error,
-              value: 1,
-            },
-          ],
-          tags,
-        );
-      }
-
       throw error;
     }
   }
@@ -1407,10 +1293,6 @@ export abstract class UserAccountProviderBase<TProvider extends Provider> {
       {
         name: 'neo_invoke_raw',
         invoke: true,
-        measures: {
-          total: invokeDurationSec,
-          error: invokeFailures,
-        },
         labels: {
           [Labels.INVOKE_RAW_METHOD]: method,
           ...labels,
