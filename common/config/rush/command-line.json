@@ -250,6 +250,14 @@
     },
     {
       "commandKind": "global",
+      "name": "prepare",
+      "summary": "prepare packages for npm release",
+      "description": "Copy License/README to packages for npm release",
+      "safeForSimultaneousRushProcesses": false,
+      "shellCommand": "cross-env NODE_OPTIONS=\"--max-old-space-size=6144\" node ./packages/neo-one-build-tools/bin/neo-one-prepare.js"
+    },
+    {
+      "commandKind": "global",
       "name": "clean",
       "summary": "Clean up NEO-ONE packages",
       "description": "Remove build logs from all packages (and optionally lib/* and .rush/* directories)",
