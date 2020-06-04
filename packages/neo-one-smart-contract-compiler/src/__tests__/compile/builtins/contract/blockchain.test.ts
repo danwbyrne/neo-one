@@ -47,7 +47,7 @@ describe('Blockchain', () => {
     );
   });
 
-  test('currentTransaction', async () => {
+  test.only('currentTransaction', async () => {
     const node = await helpers.startNode();
 
     const data = Buffer.from('Hello World', 'utf8').toString('hex');
@@ -61,7 +61,8 @@ describe('Blockchain', () => {
       assertEqual(transaction.type, TransactionType.Invocation);
 
       const attributes = transaction.attributes;
-      assertEqual(attributes.length, 3);
+      console.log(attributes);
+      assertEqual(attributes.length, 4);
 
       const attribute = attributes[0];
 
