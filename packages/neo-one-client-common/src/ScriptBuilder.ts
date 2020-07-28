@@ -6,10 +6,8 @@ import { ScriptBuilderParam, ScriptBuilderParamToCallbacks } from './types';
 
 export class ScriptBuilder extends BaseScriptBuilder {
   private readonly pushParamCallbacks: ScriptBuilderParamToCallbacks<this>;
-
   public constructor() {
     super();
-
     this.pushParamCallbacks = {
       undefined: () => this.emitPush(Buffer.alloc(0, 0)),
       array: (param) => this.emitPushArray(param),
@@ -67,7 +65,6 @@ export class ScriptBuilder extends BaseScriptBuilder {
 
     return this.emitSysCall('System.Contract.Call');
   }
-
   // tslint:disable-next-line readonly-array
   public emitAppCall(scriptHash: UInt160, operation: string, ...params: ScriptBuilderParam[]): this {
     this.emitAppCallInvocation(operation, ...params);
@@ -86,7 +83,6 @@ export class ScriptBuilder extends BaseScriptBuilder {
 
     return this;
   }
-
   public emitPushObject(params: { readonly [key: string]: ScriptBuilderParam }): this {
     this.emitOp('NEWMAP');
     Object.entries(params).forEach(([key, value]) => {

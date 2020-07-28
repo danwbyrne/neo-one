@@ -211,6 +211,10 @@
       "allowedCategories": [ "production" ]
     },
     {
+      "name": "@neo-one/edge",
+      "allowedCategories": [ "production" ]
+    },
+    {
       "name": "@neo-one/editor",
       "allowedCategories": [ "web" ]
     },
@@ -605,6 +609,10 @@
     {
       "name": "dgeni-packages",
       "allowedCategories": [ "web" ]
+    },
+    {
+      "name": "edge-js",
+      "allowedCategories": [ "production" ]
     },
     {
       "name": "elliptic",
