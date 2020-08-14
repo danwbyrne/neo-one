@@ -17,18 +17,14 @@
 
   <ItemGroup>
     <Reference Include="EdgeJs">
-      <HintPath>../node_modules/@neo-one/edge/src/double/Edge.js/bin/Release/netcoreapp3.0/EdgeJs.dll</HintPath>
+      <HintPath>..\node_modules\@neo-one\edge\src\double\Edge.js\bin\Release\netcoreapp3.0\EdgeJs.dll</HintPath>
       <Private>true</Private>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="/Users/danielbyrne/neo-vm/src/neo-vm/neo-vm.csproj" />
-    <ProjectReference Include="/Users/danielbyrne/neo/src/neo/neo.csproj" />
+    <ProjectReference Include="C:\Users\Dan\neo-vm\src\neo-vm\neo-vm.csproj" />
+    <ProjectReference Include="C:\Users\Dan\neo\src\neo\neo.csproj" />
   </ItemGroup>
-
-  <!-- <ItemGroup>
-    <ProjectReference Include="/Users/danielbyrne/neo-vm/src/neo-vm/neo-vm.csproj" />
-  </ItemGroup> -->
 
 </Project>
