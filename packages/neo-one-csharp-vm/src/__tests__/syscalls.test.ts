@@ -1,9 +1,9 @@
-import { ScriptBuilder, utils } from '@neo-one/client-common';
+import { common, ScriptBuilder } from '@neo-one/client-common';
 import { TriggerType } from '@neo-one/node-core';
 import { BN } from 'bn.js';
 import _ from 'lodash';
-import { BufferStackItem, ByteStringStackItem, IntegerStackItem } from 'src/StackItems';
 import { ApplicationEngine } from '../ApplicationEngine';
+import { ByteStringStackItem, IntegerStackItem } from '../StackItems';
 
 // tslint:disable: no-array-mutation
 describe('Application Engine SysCall Tests', () => {
@@ -154,5 +154,50 @@ describe('Application Engine SysCall Tests', () => {
     expect(byteStringItem._buffer.toString('hex')).toEqual(
       'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
     );
+  });
+
+  test('System.Blockchain.GetBlock -- Halt', () => {
+    // const transaction = new TransactionModel({
+    //   script: Buffer.from([0x01]),
+    //   attributes: [],
+    //   signers: [],
+    //   networkFee: new BN(0x02),
+    //   systemFee: new BN(0x03),
+    //   nonce: 0x04,
+    //   validUntilBlock: 0x05,
+    //   version: 0x06,
+    //   witnesses: [new WitnessModel({ invocation: Buffer.from([]), verification: Buffer.from([0x07]) })],
+    // });
+
+    // const block = new Block({
+    //   index: 0,
+    //   timestamp: new BN(2),
+    //   version: 3,
+    //   witness: new Witness({ invocation: Buffer.from([]), verification: Buffer.from([]) }),
+    //   previousHash: common.ZERO_UINT256,
+    //   merkleRoot: common.ZERO_UINT256,
+    //   nextConsensus: common.ZERO_UINT160,
+    //   consensusData: new ConsensusData({ nonce: 1, primaryIndex: 1 }),
+    //   transactions: [transaction],
+    // });
+
+    engine = new ApplicationEngine({ trigger: TriggerType.Application, snapshot: true, gas: 0, testMode: true });
+    script.emitPush(Buffer.from(common.ZERO_UINT256));
+    script.emitSysCall('System.Blockchain.GetBlock');
+
+    engine.loadScript(script.build());
+    const state = engine.execute();
+    expect(state).toEqual('HALT');
+
+    const stack = engine.resultStack;
+    expect(stack.length).toEqual(1);
+    expect(stack[0].isNull).toEqual(true);
+
+    console.log(stack[0]);
+  });
+
+  test.only('blockchain debug', async () => {
+    const logTest = engine.test();
+    await new Promise((resolve) => setTimeout(resolve, 10));
   });
 });

@@ -278,16 +278,15 @@ export interface ContractJSON {
 }
 
 export interface BlockBaseJSON {
-  readonly version: number;
   readonly hash: string;
+  readonly size: number;
+  readonly version: number;
   readonly previousblockhash: string;
   readonly merkleroot: string;
   readonly time: string;
   readonly index: number;
   readonly nextconsensus: string;
   readonly witnesses: readonly WitnessJSON[];
-  readonly confirmations: number;
-  readonly nextblockhash?: string;
 }
 
 export interface ConsensusDataJSON {

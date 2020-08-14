@@ -21,7 +21,7 @@ export enum CallFlags {
 export interface EngineOptions {
   readonly trigger: TriggerType;
   readonly container?: Verifiable;
-  readonly snapshot?: StoreView;
+  readonly snapshot?: boolean;
   readonly gas: Gas;
   readonly testMode?: boolean;
 }

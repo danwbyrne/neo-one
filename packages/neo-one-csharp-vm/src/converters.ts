@@ -8,9 +8,7 @@ import { EngineOptions, Gas, StoreView, Verifiable } from './types';
 export const convertGas = (gas: Gas) => gas;
 
 // TODO
-export const convertSnapshot = (_snapshot: StoreView) => {
-  throw new Error('not implemented');
-};
+export const convertSnapshot = (_snapshot: StoreView) => _snapshot;
 
 // TODO
 export const convertContainer = (_container: Verifiable) => {

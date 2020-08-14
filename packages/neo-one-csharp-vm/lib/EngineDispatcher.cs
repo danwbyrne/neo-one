@@ -6,13 +6,13 @@ using System.Linq;
 using Neo.VM;
 using Neo.VM.Types;
 using Neo.SmartContract;
-using System.Collections.Generic;
-using Neo.IO.Json;
+// using Neo.Ledger;
 
 public class EngineDispatcher
 {
 
     private ApplicationEngine engine;
+    // private Neo.NeoSystem system;
     public async Task<object> Invoke(dynamic input)
     {
         string method = (string)input.method;
@@ -25,6 +25,13 @@ public class EngineDispatcher
                 long gas = (long)input.args.gas;
                 bool testMode = (bool)input.args.testMode;
                 return this._create(trigger, null, null, gas, testMode);
+
+            // case "createwithsnapshot":
+            //     TriggerType ssTrigger = (TriggerType)input.args.trigger;
+            //     long ssGas = (long)input.args.gas;
+            //     bool ssTestMode = (bool)input.args.testMode;
+            // var snapshot = Blockchain.Singleton.GetSnapshot();
+            // return this._create(ssTrigger, null, snapshot, ssGas, ssTestMode);
 
             case "test":
                 return this._test();
@@ -73,6 +80,8 @@ public class EngineDispatcher
     {
         if (this.engine == null)
         {
+            // this.system = new Neo.NeoSystem();
+            // var _ = Blockchain.Singleton;
             this.engine = ApplicationEngine.Create(trigger, container, snapshot, gas, testMode);
         }
 
@@ -134,7 +143,9 @@ public class EngineDispatcher
     private dynamic _test()
     {
         this.isInitialized();
-        return BitConverter.GetBytes(200);
+        Console.WriteLine("HELLLLLLLOOOOOO");
+
+        return true;
     }
 
     private bool _dispose()
