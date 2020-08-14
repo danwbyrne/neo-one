@@ -35,7 +35,7 @@ interface ExecutionEngineMethods extends DefaultMethods {
 const engineAssemblyOptions = {
   assemblyFile: path.join(constants.CSHARP_APP_ROOT, 'EngineDispatcher.dll'),
   methodName: 'Invoke',
-  typeName: 'EngineDispatcher',
+  typeName: 'NEOONE.EngineDispatcher',
 };
 
 export const createEngineDispatcher = () => createCSharpDispatchInvoke<ExecutionEngineMethods>(engineAssemblyOptions);

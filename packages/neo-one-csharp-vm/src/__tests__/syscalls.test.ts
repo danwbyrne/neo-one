@@ -196,8 +196,7 @@ describe('Application Engine SysCall Tests', () => {
     console.log(stack[0]);
   });
 
-  test.only('blockchain debug', async () => {
+  test.only('blockchain debug', () => {
     const logTest = engine.test();
-    await new Promise((resolve) => setTimeout(resolve, 10));
   });
 });
