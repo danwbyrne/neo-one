@@ -35,18 +35,20 @@ export interface BlockBaseAdd {
 
 export abstract class BlockBase implements EquatableKey {
   public static deserializeBlockBaseWireBase(options: DeserializeWireBaseOptions): BlockBaseAdd {
+    const {
+      version,
+      previousHash,
+      merkleRoot,
+      timestamp,
+      index,
+      nextConsensus,
+    } = this.deserializeBlockBaseWireBaseUnsigned(options);
     const { reader } = options;
 
-    const version = reader.readUInt32LE();
-    const previousHash = reader.readUInt256();
-    const merkleRoot = reader.readUInt256();
-    const timestamp = reader.readUInt64LE();
-    const index = reader.readUInt32LE();
-    const nextConsensus = reader.readUInt160();
-    if (reader.readUInt8() !== 1) {
-      throw new InvalidFormatError(`Expected 1 witness. Received: ${reader.readUInt8()}`);
+    const witnesses = reader.readArray(() => Witness.deserializeWireBase(options));
+    if (witnesses.length !== 1) {
+      throw new InvalidFormatError(`Expected exactly 1 witness, found: ${witnesses.length}`);
     }
-    const witness = Witness.deserializeWireBase(options);
 
     return {
       version,
@@ -55,7 +57,26 @@ export abstract class BlockBase implements EquatableKey {
       timestamp,
       index,
       nextConsensus,
-      witness,
+      witness: witnesses[0],
+    };
+  }
+  public static deserializeBlockBaseWireBaseUnsigned(options: DeserializeWireBaseOptions): BlockBaseAdd {
+    const { reader } = options;
+
+    const version = reader.readUInt32LE();
+    const previousHash = reader.readUInt256();
+    const merkleRoot = reader.readUInt256();
+    const timestamp = reader.readUInt64LE();
+    const index = reader.readUInt32LE();
+    const nextConsensus = reader.readUInt160();
+
+    return {
+      version,
+      previousHash,
+      merkleRoot,
+      timestamp,
+      index,
+      nextConsensus,
     };
   }
 
@@ -70,19 +91,19 @@ export abstract class BlockBase implements EquatableKey {
     common.uInt256Equal(this.hash, other.hash),
   );
   public readonly toKeyString = utils.toKeyString(BlockBase, () => this.hashHex);
-  public readonly getScriptHashesForVerifying = utils.lazyAsync(
-    async ({ getHeader }: BlockGetScriptHashesForVerifyingOptions) => {
-      if (this.index === 0) {
-        return new Set([common.uInt160ToHex(crypto.toScriptHash(this.witness.verification))]);
-      }
+  // public readonly getScriptHashesForVerifying = utils.lazyAsync(
+  //   async ({ getHeader }: BlockGetScriptHashesForVerifyingOptions) => {
+  //     if (this.index === 0) {
+  //       return new Set([common.uInt160ToHex(crypto.toScriptHash(this.witness.verification))]);
+  //     }
 
-      const previousHeader = await getHeader({
-        hashOrIndex: this.previousHash,
-      });
+  //     const previousHeader = await getHeader({
+  //       hashOrIndex: this.previousHash,
+  //     });
 
-      return new Set([common.uInt160ToHex(previousHeader.nextConsensus)]);
-    },
-  );
+  //     return new Set([common.uInt160ToHex(previousHeader.nextConsensus)]);
+  //   },
+  // );
   public readonly serializeUnsigned: SerializeWire = createSerializeWire(this.serializeUnsignedBase.bind(this));
   public readonly serializeWire: SerializeWire = createSerializeWire(this.serializeWireBase.bind(this));
   private readonly hashInternal: () => UInt256;
@@ -162,7 +183,7 @@ export abstract class BlockBase implements EquatableKey {
     this.witness.serializeWireBase(writer);
   }
 
-  public serializeBlockBaseJSON(context: SerializeJSONContext): BlockBaseJSON {
+  public serializeJSON(context: SerializeJSONContext): BlockBaseJSON {
     return {
       version: this.version,
       hash: JSONHelper.writeUInt256(this.hash),
@@ -177,6 +198,7 @@ export abstract class BlockBase implements EquatableKey {
       }),
 
       witnesses: [this.witness.serializeJSON(context)],
+      // confirmations: [] TODO: this is a property we used to use, do we still need?
     };
   }
 

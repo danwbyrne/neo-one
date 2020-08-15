@@ -297,8 +297,14 @@ export interface ConsensusDataJSON {
 export interface HeaderJSON extends BlockBaseJSON {}
 
 export interface BlockJSON extends BlockBaseJSON {
-  readonly tx: readonly ConfirmedTransactionJSON[];
-  readonly concensus_data: ConsensusDataJSON;
+  // TODO: this used to be `ConfirmedTransactionJSON[]`. Why?
+  readonly tx: readonly TransactionJSON[];
+  readonly consensusdata?: ConsensusDataJSON;
+}
+
+export interface TrimmedBlockJSON extends BlockBaseJSON {
+  readonly consensusdata?: ConsensusDataJSON;
+  readonly hashes: readonly string[];
 }
 
 export interface NetworkSettingsJSON {
