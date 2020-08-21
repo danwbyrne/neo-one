@@ -177,7 +177,7 @@ export class Transaction extends TransactionModel<Attribute, Witness, Signer>
       size: this.size,
       version: this.version,
       nonce: this.nonce,
-      sender: scriptHashToAddress(common.uInt160ToString(this.sender)),
+      sender: this.sender ? scriptHashToAddress(common.uInt160ToString(this.sender)) : undefined,
       sysfee: JSONHelper.writeUInt64LE(this.systemFee),
       netfee: JSONHelper.writeUInt64LE(this.networkFee),
       validuntilblock: this.validUntilBlock,

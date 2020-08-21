@@ -17,3 +17,10 @@ export const createSerializeWire = (serializeWireBase: (writer: BinaryWriter) =>
 export interface SerializableJSON<TJSON> {
   readonly serializeJSON: () => TJSON;
 }
+export const createGetHashData = (serializeWire: () => Buffer, magic = 5195086) => () => {
+  const writer = new BinaryWriter();
+  writer.writeUInt32LE(magic);
+  writer.writeBytes(serializeWire());
+
+  return writer.toBuffer();
+};
