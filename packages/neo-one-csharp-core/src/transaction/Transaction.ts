@@ -27,8 +27,9 @@ import { Attribute, deserializeAttribute } from './attributes';
 export type TransactionAddUnsigned = Omit<TransactionModelAdd<Attribute, Witness, Signer>, 'witnesses'>;
 export type TransactionAdd = TransactionModelAdd<Attribute, Witness, Signer>;
 
-export class Transaction extends TransactionModel<Attribute, Witness, Signer>
-  implements SerializableWire<Transaction>, SerializableJSON<TransactionJSON> {
+export class Transaction
+  extends TransactionModel<Attribute, Witness, Signer>
+  implements SerializableWire, SerializableJSON<TransactionJSON> {
   public static deserializeWireBase(options: DeserializeWireBaseOptions): Transaction {
     const {
       version,
