@@ -2259,13 +2259,6 @@
   dependencies:
     gulp "~4.0.2"
 
-"@rush-temp/csharp-vm@file:./projects/csharp-vm.tgz":
-  version "0.0.0"
-  resolved "file:./projects/csharp-vm.tgz#5790613b20127993411bbaf8cb19d68ccf9e3be2"
-  dependencies:
-    "@neo-one/edge" "^15.0.0"
-    gulp "~4.0.2"
-
 "@rush-temp/developer-tools-frame@file:./projects/developer-tools-frame.tgz":
   version "0.0.0"
   resolved "file:./projects/developer-tools-frame.tgz"
@@ -3219,7 +3212,7 @@
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.5.tgz#b14efa8852b7768d898906613c23f688713e02cd"
   integrity sha512-Q1y515GcOdTHgagaVFhHnIFQ38ygs/kmxdNpvpou+raI9UO3YZcHDngBSYKQklcKlvA7iuQlmIKbzvmxcOE9CQ==
 
-"@types/elliptic@^6.4.12", "@types/elliptic@^6.4.9":
+"@types/elliptic@^6.4.12":
   version "6.4.12"
   resolved "https://registry.yarnpkg.com/@types/elliptic/-/elliptic-6.4.12.tgz#e8add831f9cc9a88d9d84b3733ff669b68eaa124"
   integrity sha512-gP1KsqoouLJGH6IJa28x7PXb3cRqh83X8HCLezd2dF+XcAIMKYv53KV+9Zn6QA561E120uOqZBQ+Jy/cl+fviw==
