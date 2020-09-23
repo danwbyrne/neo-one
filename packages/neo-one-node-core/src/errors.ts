@@ -21,6 +21,10 @@ export const InvalidConsensusMessageTypeError = makeErrorWithCode(
   'INVALID_CONSENSUS_MESSAGE_TYPE',
   (value: number) => `Expected ConsensusMessageType, found: ${value.toString(16)}`,
 );
+export const InvalidChangeViewReasonError = makeErrorWithCode(
+  'INVALID_CHANGE_VIEW_REASON',
+  (value: number) => `Expected ChangeViewReason, found: ${value.toString(16)}`,
+);
 export const UnsignedBlockError = makeErrorWithCode(
   'UNSIGNED_BLOCK',
   (stringHash: string) => `Block script does not exist because it has not been signed. @ block with hash ${stringHash}`,
