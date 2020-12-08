@@ -1,6 +1,13 @@
 # Change Log - @neo-one/node-core
 
-This log was last generated on Tue, 08 Dec 2020 19:29:01 GMT and should not be manually modified.
+This log was last generated on Tue, 08 Dec 2020 20:39:46 GMT and should not be manually modified.
+
+## 3.0.1
+Tue, 08 Dec 2020 20:39:46 GMT
+
+### Patches
+
+- 3.0.1-preview3 release
 
 ## 3.0.0
 Tue, 08 Dec 2020 19:29:01 GMT
